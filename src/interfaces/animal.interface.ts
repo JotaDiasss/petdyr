@@ -1,4 +1,4 @@
 export interface IAnimal {
-    especie: string;
-    racas: string[];
+  especie: string;
+  racas: string[];
 }
