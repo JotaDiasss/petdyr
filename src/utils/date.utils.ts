@@ -22,13 +22,13 @@ export function dataDeNascimentoValida(valor: Date): boolean {
   const nascimentoUTC = Date.UTC(
     valor.getUTCFullYear(),
     valor.getUTCMonth(),
-    valor.getUTCDate()
+    valor.getUTCDate(),
   );
 
   const hojeUTC = Date.UTC(
     hoje.getUTCFullYear(),
     hoje.getUTCMonth(),
-    hoje.getUTCDate()
+    hoje.getUTCDate(),
   );
 
   return nascimentoUTC <= hojeUTC;

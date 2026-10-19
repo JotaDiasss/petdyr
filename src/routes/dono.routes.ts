@@ -1,5 +1,13 @@
 import { Router } from "express";
 
+import {
+    acharTodosDonosController,
+    acharDonoPorIdController,
+    criarDonoController,
+    atualizarDonoController,
+    deletarDonoController,
+} from "../controllers/dono.controller";
+
 const router = Router();
 
 router.get("/dono");

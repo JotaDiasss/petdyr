@@ -19,12 +19,21 @@ export async function atualizarDono(id: string, dados: Partial<IDono>) {
   if (!dados || typeof dados !== "object" || Array.isArray(dados)) {
     throw new Error("Dados de atualização inválidos");
   }
-  if (Object.keys(dados).length === 0 || Object.keys(dados).some(campo => !["nome", "cpf"].includes(campo))) {
+  if (
+    Object.keys(dados).length === 0 ||
+    Object.keys(dados).some((campo) => !["nome", "cpf"].includes(campo))
+  ) {
     throw new Error("Informe apenas nome e/ou cpf para atualizar");
   }
   if ("nome" in dados) {
-    if (typeof dados.nome !== "string" || !dados.nome.trim() || !/^[\p{L}\s]+$/u.test(dados.nome)) {
-      throw new Error("Nome deve conter apenas letras e espaços e não pode ser vazio");
+    if (
+      typeof dados.nome !== "string" ||
+      !dados.nome.trim() ||
+      !/^[\p{L}\s]+$/u.test(dados.nome)
+    ) {
+      throw new Error(
+        "Nome deve conter apenas letras e espaços e não pode ser vazio",
+      );
     }
     dono.nome = dados.nome;
   }

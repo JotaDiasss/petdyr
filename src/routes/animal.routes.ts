@@ -1,5 +1,13 @@
 import { Router } from "express";
 
+import {
+    acharTodosAnimaisController,
+    acharAnimalPorIdController,
+    criarAnimalController,
+    atualizarAnimalController,
+    deletarAnimalController,
+} from "../controllers/animal.controller";
+
 const router = Router();
 
 router.get("/animais");
