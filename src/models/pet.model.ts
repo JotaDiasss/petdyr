@@ -6,9 +6,9 @@ const petSchema = new Schema<IPet>({
     type: String,
     required: true,
   },
-  idade: {
-    type: Number,
-    required: true,
+  nascimento: {
+    type: Date,
+    require: true,
   },
   animal: {
     especie: {
@@ -26,7 +26,7 @@ const petSchema = new Schema<IPet>({
       required: true,
     },
     cpf: {
-      type: Number,
+      type: String,
       required: true,
       unique: true,
     },

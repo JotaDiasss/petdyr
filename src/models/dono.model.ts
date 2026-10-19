@@ -7,7 +7,7 @@ const donoSchema = new Schema<IDono>({
     required: true,
   },
   cpf: {
-    type: Number,
+    type: String,
     required: true,
     unique: true,
   },

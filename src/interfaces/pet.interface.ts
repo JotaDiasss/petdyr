@@ -1,12 +1,12 @@
 export interface IPet {
   nome: string;
-  idade: number;
+  nascimento: Date;
   animal: {
     especie: string;
     raca: string;
   };
   dono: {
     nome: string;
-    cpf: number;
+    cpf: string;
   };
 }
