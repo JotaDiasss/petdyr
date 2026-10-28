@@ -34,7 +34,7 @@ export async function criarAnimal(dados: IAnimal) {
 
   for (const raca of dados.racas) {
     if (typeof raca !== "string") {
-      throw new Error("Raça deve ser uma");
+      throw new Error("Raça deve ser uma string");
     }
 
     if (!/^[\p{L}\s]+$/u.test(raca)) {
@@ -42,7 +42,7 @@ export async function criarAnimal(dados: IAnimal) {
     }
 
     if (raca === "" || raca.trim() === "") {
-      throw new Error("Nome da Raça invalido");
+      throw new Error("Nome da Raça inválido");
     }
   }
 
