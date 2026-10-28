@@ -5,6 +5,10 @@ import { Dono } from "../models/dono.model";
 import { dataDeNascimentoValida } from "../utils/date.utils";
 import { isObjectIdOrHexString } from "mongoose";
 
+export async function acharTodosPets() {
+  return Pet.find();
+}
+
 export async function acharPetPorId(id: string) {
   if (!isObjectIdOrHexString(id)) {
     throw new Error("ID do pet inválido");
@@ -14,6 +18,52 @@ export async function acharPetPorId(id: string) {
     throw new Error("Pet não encontrado");
   }
   return pet;
+}
+
+export async function criarPet(dados: IPet) {
+  // Nome
+  if (dados.nome === "" || dados.nome.trim() === "") {
+    throw new Error("Nome é obrigatório");
+  }
+
+  if (!/^[a-zA-Z\s]+$/.test(dados.nome)) {
+    throw new Error("Nome deve conter apenas letras e espaços");
+  }
+
+  //  Nascimento
+
+  if (
+    !(dados.nascimento instanceof Date) ||
+    Number.isNaN(dados.nascimento.getTime())
+  ) {
+    throw new Error("Data de nascimento inválida");
+  }
+
+  if (!dataDeNascimentoValida(dados.nascimento)) {
+    throw new Error("Data de nascimento inválida");
+  }
+
+  //  Animal
+  const animalValido = await Animal.exists({
+    especie: dados.animal.especie,
+    racas: dados.animal.raca,
+  });
+
+  if (!animalValido) {
+    throw new Error("A espécie/raça não existe");
+  }
+
+  //  Dono
+  const donoValido = await Dono.exists({
+    nome: dados.dono.nome,
+    cpf: dados.dono.cpf,
+  });
+
+  if (!donoValido) {
+    throw new Error("O dono não existe ");
+  }
+
+  return await Pet.create(dados);
 }
 
 export async function atualizarPet(id: string, dados: Partial<IPet>) {
@@ -64,7 +114,9 @@ export async function atualizarPet(id: string, dados: Partial<IPet>) {
       especie: dados.animal.especie,
       racas: dados.animal.raca,
     });
-    if (!animalValido) throw new Error("A espécie/raça não existe");
+    if (!animalValido){
+      throw new Error("A espécie/raça não existe");
+    }
     pet.animal = { especie: dados.animal.especie, raca: dados.animal.raca };
   }
   if ("dono" in dados) {
@@ -85,55 +137,6 @@ export async function atualizarPet(id: string, dados: Partial<IPet>) {
   return pet.save();
 }
 
-export async function acharTodosPets() {
-  return Pet.find();
-}
-
-export async function criarPet(dados: IPet) {
-  // Nome
-  if (dados.nome === "" || dados.nome.trim() === "") {
-    throw new Error("Nome é obrigatorio");
-  }
-
-  if (!/^[a-zA-Z\s]+$/.test(dados.nome)) {
-    throw new Error("Nome deve conter apenas letras e espaços");
-  }
-
-  //  Nascimento
-
-  if (
-    !(dados.nascimento instanceof Date) ||
-    Number.isNaN(dados.nascimento.getTime())
-  ) {
-    throw new Error("Data de nascimento inválida");
-  }
-
-  if (!dataDeNascimentoValida(dados.nascimento)) {
-    throw new Error("Data de nascimento inválida");
-  }
-
-  //  Animal
-  const animaValido = await Animal.exists({
-    especie: dados.animal.especie,
-    racas: dados.animal.raca,
-  });
-
-  if (!animaValido) {
-    throw new Error("A espécie/raça não existe");
-  }
-
-  //  Dono
-  const donoValido = await Dono.exists({
-    nome: dados.dono.nome,
-    cpf: dados.dono.cpf,
-  });
-
-  if (!donoValido) {
-    throw new Error("O dono não existe ");
-  }
-
-  return await Pet.create(dados);
-}
 
 export async function deletarPet(id: string) {
   const pet = await Pet.findByIdAndDelete(id);

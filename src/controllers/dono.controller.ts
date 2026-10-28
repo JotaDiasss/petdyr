@@ -93,7 +93,7 @@ export async function atualizarDonoController(req: Request<{id:string}>, res: Re
         err.message === "Nome deve conter apenas letras e espaços e não pode ser vazio" ||
         err.message === "CPF inválido ou já existente"
       ) {
-        res.status(400).json({ err: err.message })
+        return res.status(400).json({ err: err.message })
       }
       
       if (
