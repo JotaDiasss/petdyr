@@ -13,7 +13,7 @@ export async function acharTodosAnimaisController(req: Request, res: Response) {
     const animais = await acharTodosAnimais();
     res.status(200).json(animais);
   } catch (err) {
-    res.status(500).json({ err: "Erro ao buscar animais", });
+    res.status(500).json({ err: "Erro ao buscar animais" });
   }
 }
 
@@ -29,7 +29,10 @@ export async function acharAnimalPorIdController(
     res.status(200).json(animal);
   } catch (err) {
     if (err instanceof Error) {
-      if (err.message === "Animal não encontrado") {
+      if (
+        err.message === "Animal não encontrado" ||
+        err.message === "ID do animal inválido"
+      ) {
         return res.status(404).json({ err: err.message });
       }
     }
@@ -60,20 +63,20 @@ export async function criarAnimalController(req: Request, res: Response) {
       ) {
         return res.status(400).json({ err: err.message });
       }
+
       if (
         err.message === "Animal não encontrado" ||
         err.message === "Espécie não encontrada" ||
         err.message === "Raça não encontrada" ||
         err.message === "Erro ao buscar animal" ||
         err.message === "Erro ao buscar espécie" ||
-        err.message === "Erro ao buscar raça"
+        err.message === "Erro ao buscar raça" ||
+        err.message === "ID do animal inválido"
       ) {
         return res.status(404).json({ err: err.message });
       }
     }
-    res.status(500).json({
-      err: "Erro ao criar o animal",
-    });
+    res.status(500).json({ err: "Erro ao criar o animal" });
   }
 }
 
@@ -83,9 +86,9 @@ export async function atualizarAnimalController(
 ) {
   try {
     const id = req.params.id;
-    const { especie, racas }: Partial<IAnimal> = req.body;
+    const { especie, racas }:Partial<IAnimal> = req.body;
 
-    const dados: Partial<IAnimal> = {};
+    const dados:Partial<IAnimal> = {};
 
     if (especie !== undefined) {
       dados.especie = especie;
@@ -116,20 +119,19 @@ export async function atualizarAnimalController(
         err.message === "Raça não encontrada" ||
         err.message === "Erro ao buscar animal" ||
         err.message === "Erro ao buscar espécie" ||
-        err.message === "Erro ao buscar raça"
+        err.message === "Erro ao buscar raça" ||
+        err.message === "ID do animal inválido"
       ) {
         return res.status(404).json({ err: err.message });
       }
     }
+    return res.status(500).json({ err: "Erro ao editar o animal" })
   }
 }
 
-export async function deletarAnimalController(req: Request, res: Response) {
+export async function deletarAnimalController(req: Request<{id:string}>, res: Response) {
   try {
     const id = req.params.id
-    if (typeof id !== "string") {
-      throw new Error ("Id inválido")
-    }
     
     await deletarAnimal(id)
 
@@ -137,13 +139,8 @@ export async function deletarAnimalController(req: Request, res: Response) {
   } catch (err) {
     if (err instanceof Error) {
       if (
-        err.message === "Id inválido"
-      ) {
-        return res.status(400).json({ err: err.message })
-      }
-
-      if (
-        err.message === "Animal não encontrado"
+        err.message === "Animal não encontrado" ||
+        err.message === "ID do animal inválido"
       ) {
         return res.status(404).json({ err: err.message })
       }

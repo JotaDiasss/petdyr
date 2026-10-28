@@ -6,9 +6,13 @@ import { dataDeNascimentoValida } from "../utils/date.utils";
 import { isObjectIdOrHexString } from "mongoose";
 
 export async function acharPetPorId(id: string) {
-  if (!isObjectIdOrHexString(id)) throw new Error("ID de pet inválido");
+  if (!isObjectIdOrHexString(id)) {
+    throw new Error("ID do pet inválido");
+  }
   const pet = await Pet.findById(id);
-  if (!pet) throw new Error("Pet não encontrado");
+  if (!pet) {
+    throw new Error("Pet não encontrado");
+  }
   return pet;
 }
 

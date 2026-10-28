@@ -8,10 +8,32 @@ export async function acharTodosDonos() {
 }
 
 export async function acharDonoPorId(id: string) {
-  if (!isObjectIdOrHexString(id)) throw new Error("ID de dono inválido");
+  if (!isObjectIdOrHexString(id)){
+    throw new Error("ID do dono inválido");
+  }
   const dono = await Dono.findById(id);
-  if (!dono) throw new Error("Dono não encontrado");
+  if (!dono){
+    throw new Error("Dono não encontrado");
+  }
   return dono;
+}
+
+export async function criarDono(dados: IDono) {
+  //  Nome
+  if (dados.nome === "" || dados.nome.trim() === "") {
+    throw new Error("Nome do dono é obrigatório");
+  }
+
+  if (!/^[a-zA-Z\s]+$/.test(dados.nome)) {
+    throw new Error("Nome deve conter apenas letras e espaços");
+  }
+
+  //  CPF
+  if (!cpf.isValid(dados.cpf)) {
+    throw new Error("CPF inválido ou já existente");
+  }
+
+  return await Dono.create(dados);
 }
 
 export async function atualizarDono(id: string, dados: Partial<IDono>) {
@@ -39,29 +61,11 @@ export async function atualizarDono(id: string, dados: Partial<IDono>) {
   }
   if ("cpf" in dados) {
     if (typeof dados.cpf !== "string" || !cpf.isValid(dados.cpf)) {
-      throw new Error("CPF inválido");
+      throw new Error("CPF inválido ou já existente");
     }
     dono.cpf = dados.cpf;
   }
   return dono.save();
-}
-
-export async function criarDono(dados: IDono) {
-  //  Nome
-  if (dados.nome === "" || dados.nome.trim() === "") {
-    throw new Error("Nome do dono é obrigatório");
-  }
-
-  if (!/^[a-zA-Z\s]+$/.test(dados.nome)) {
-    throw new Error("Nome deve conter apenas letras e espaços");
-  }
-
-  //  CPF
-  if (!cpf.isValid(dados.cpf)) {
-    throw new Error("CPF inválido");
-  }
-
-  return await Dono.create(dados);
 }
 
 export async function deletarDono(id: string) {

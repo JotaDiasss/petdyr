@@ -7,9 +7,13 @@ export async function acharTodosAnimais() {
 }
 
 export async function acharAnimalPorId(id: string) {
-  if (!isObjectIdOrHexString(id)) throw new Error("ID de animal inválido");
+  if (!isObjectIdOrHexString(id)) {
+    throw new Error("ID do animal inválido");
+  }
   const animal = await Animal.findById(id);
-  if (!animal) throw new Error("Animal não encontrado");
+  if (!animal) {
+    throw new Error("Animal não encontrado");
+  }
   return animal;
 }
 
