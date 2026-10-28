@@ -10,10 +10,10 @@ import {
 
 const router = Router();
 
-router.get("/dono");
-router.get("/dono/:id");
-router.post("/dono/");
-router.patch("/dono/:id");
-router.delete("/dono/:id");
+router.get("/dono", acharTodosDonosController);
+router.get("/dono/:id", acharDonoPorIdController);
+router.post("/dono/", criarDonoController);
+router.patch("/dono/:id", atualizarDonoController);
+router.delete("/dono/:id", deletarDonoController);
 
 export default router;

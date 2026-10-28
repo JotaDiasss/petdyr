@@ -10,10 +10,10 @@ import {
 
 const router = Router();
 
-router.get  ("/pet");
-router.get  ("/pet/:id");
-router.post ("/pet/");
-router.patch("/pet/:id");
-router.delete("/pet/:id");
+router.get  ("/pet", acharTodosPetsController);
+router.get  ("/pet/:id", acharPetPorIdController);
+router.post ("/pet/", criarPetController);
+router.patch("/pet/:id", atualizarPetController);
+router.delete("/pet/:id", deletarAnimalController);
 
 export default router;
