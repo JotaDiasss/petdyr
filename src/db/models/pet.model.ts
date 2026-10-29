@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import type { IPet } from "../interfaces/pet.interface";
+import type { IPet } from "../../interfaces/pet.interface";
 
 const petSchema = new Schema<IPet>({
   nome: {

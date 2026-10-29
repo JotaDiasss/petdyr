@@ -13,17 +13,23 @@ export async function acharTodosPetsController(req: Request, res: Response) {
     const pets = await acharTodosPets()
     res.status(200).json(pets)
   } catch (err) {
+    if (err && typeof err === "object" && "code" in err && err.code === 11000) {
+      return res.status(409).json({ err: "Cadastro duplicado" });
+    }
     res.status(500).json({ err: "Erro ao buscar pets"})
   }
 }
 
 export async function acharPetPorIdController(req: Request<{id:string}>, res: Response) {
   try {
-    const id = req.body.id
+    const id = req.params.id
     const pet = await acharPetPorId(id)
 
     res.status(200).json(pet)
   } catch (err) {
+    if (err && typeof err === "object" && "code" in err && err.code === 11000) {
+      return res.status(409).json({ err: "Cadastro duplicado" });
+    }
     if (err instanceof Error) {
       if (
         err.message === "ID do pet inválido" ||
@@ -51,13 +57,16 @@ export async function criarPetController(req: Request, res: Response) {
 
     return res.status(201).json(pet);
   } catch (err) {
+    if (err && typeof err === "object" && "code" in err && err.code === 11000) {
+      return res.status(409).json({ err: "Cadastro duplicado" });
+    }
     if (err instanceof Error) {
       if (
         err.message === "Nome é obrigatório" ||
         err.message === "Nome deve conter apenas letras e espaços" ||
         err.message === "Data de nascimento inválida"
       ) {
-        return res.send(400).json({ err: err.message})
+        return res.status(400).json({ err: err.message})
       }
 
       if (
@@ -66,7 +75,7 @@ export async function criarPetController(req: Request, res: Response) {
         err.message === "A espécie/raça não existe" ||
         err.message === "O dono não existe"
       ) {
-        return res.send(404).json({ err: err.message })
+        return res.status(404).json({ err: err.message })
       }
     }
     res.status(500).json({ err: "Erro ao criar o pet"})
@@ -100,6 +109,9 @@ export async function atualizarPetController(req: Request<{id:string}>, res: Res
 
     return res.status(200).json(pet)
   } catch (err) {
+    if (err && typeof err === "object" && "code" in err && err.code === 11000) {
+      return res.status(409).json({ err: "Cadastro duplicado" });
+    }
     if (err instanceof Error) {
       if (
         err.message === "Dados de atualização inválidos" ||
@@ -120,18 +132,21 @@ export async function atualizarPetController(req: Request<{id:string}>, res: Res
         return res.status(404).json({ err: err.message })
       }
     }
-    res.send(500).json({ err: "Erro ao atualizar o pet"})
+    res.status(500).json({ err: "Erro ao atualizar o pet"})
   }
 }
 
 export async function deletarAnimalController(req: Request<{id:string}>, res: Response ) {
   try {
-    const id = req.body.id
+    const id = req.params.id
 
     await deletarPet(id)
 
     res.status(204).send()
   } catch (err) {
+    if (err && typeof err === "object" && "code" in err && err.code === 11000) {
+      return res.status(409).json({ err: "Cadastro duplicado" });
+    }
     if (err instanceof Error) {
       if (
         err.message === "ID do pet inválido" ||

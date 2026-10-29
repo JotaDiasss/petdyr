@@ -1,7 +1,7 @@
 import type { IPet } from "../interfaces/pet.interface";
-import { Animal } from "../models/animal.model";
-import { Pet } from "../models/pet.model";
-import { Dono } from "../models/dono.model";
+import { Animal } from "../db/models/animal.model";
+import { Pet } from "../db/models/pet.model";
+import { Dono } from "../db/models/dono.model";
 import { dataDeNascimentoValida } from "../utils/date.utils";
 import { isObjectIdOrHexString } from "mongoose";
 
@@ -60,7 +60,7 @@ export async function criarPet(dados: IPet) {
   });
 
   if (!donoValido) {
-    throw new Error("O dono não existe ");
+    throw new Error("O dono não existe");
   }
 
   return await Pet.create(dados);
@@ -139,6 +139,7 @@ export async function atualizarPet(id: string, dados: Partial<IPet>) {
 
 
 export async function deletarPet(id: string) {
+  if (!isObjectIdOrHexString(id)) throw new Error("ID do pet inválido");
   const pet = await Pet.findByIdAndDelete(id);
 
   if (!pet) {

@@ -1,5 +1,5 @@
 import type { IAnimal } from "../interfaces/animal.interface";
-import { Animal } from "../models/animal.model";
+import { Animal } from "../db/models/animal.model";
 import { isObjectIdOrHexString } from "mongoose";
 
 export async function acharTodosAnimais() {
@@ -98,6 +98,7 @@ export async function atualizarAnimal(id: string, dados: Partial<IAnimal>) {
 }
 
 export async function deletarAnimal(id: string) {
+  if (!isObjectIdOrHexString(id)) throw new Error("ID do animal inválido");
   const animal = await Animal.findByIdAndDelete(id);
 
   if (!animal) {

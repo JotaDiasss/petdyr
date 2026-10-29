@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import type { IDono } from "../interfaces/dono.interface";
+import type { IDono } from "../../interfaces/dono.interface";
 
 const donoSchema = new Schema<IDono>({
   nome: {

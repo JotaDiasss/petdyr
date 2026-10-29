@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import type { IAnimal } from "../interfaces/animal.interface";
+import type { IAnimal } from "../../interfaces/animal.interface";
 
 const animalSchema = new Schema<IAnimal> ({
     especie: {

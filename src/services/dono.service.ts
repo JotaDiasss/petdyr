@@ -1,5 +1,5 @@
 import type { IDono } from "../interfaces/dono.interface";
-import { Dono } from "../models/dono.model";
+import { Dono } from "../db/models/dono.model";
 import { cpf } from "cpf-cnpj-validator";
 import { isObjectIdOrHexString } from "mongoose";
 
@@ -69,6 +69,7 @@ export async function atualizarDono(id: string, dados: Partial<IDono>) {
 }
 
 export async function deletarDono(id: string) {
+  if (!isObjectIdOrHexString(id)) throw new Error("ID do dono inválido");
   const dono = await Dono.findByIdAndDelete(id);
 
   if (!dono) {

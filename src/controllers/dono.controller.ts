@@ -13,6 +13,9 @@ export async function acharTodosDonosController(req: Request, res: Response) {
     const donos = await acharTodosDonos();
     res.status(200).json(donos);
   } catch (err) {
+    if (err && typeof err === "object" && "code" in err && err.code === 11000) {
+      return res.status(409).json({ err: "Cadastro duplicado" });
+    }
     res.status(500).json({ err: "Erro ao buscar donos" })
   }
 }
@@ -24,6 +27,9 @@ export async function acharDonoPorIdController(req: Request<{id:string}>, res: R
 
     res.status(200).json(dono);
   } catch (err) {
+    if (err && typeof err === "object" && "code" in err && err.code === 11000) {
+      return res.status(409).json({ err: "Cadastro duplicado" });
+    }
     if (err instanceof Error) {
       if (
         err.message === "Dono não encontrado" ||
@@ -47,6 +53,9 @@ export async function criarDonoController(req: Request, res: Response) {
 
     res.status(201).json(dono)
   } catch (err) {
+    if (err && typeof err === "object" && "code" in err && err.code === 11000) {
+      return res.status(409).json({ err: "Cadastro duplicado" });
+    }
     if (err instanceof Error) {
       if (
         err.message === "Nome do dono é obrigatório" ||
@@ -86,6 +95,9 @@ export async function atualizarDonoController(req: Request<{id:string}>, res: Re
 
     return res.status(200).json(dono)
   } catch (err) {
+    if (err && typeof err === "object" && "code" in err && err.code === 11000) {
+      return res.status(409).json({ err: "Cadastro duplicado" });
+    }
     if (err instanceof Error) {
       if (
         err.message === "Dados de atualização inválidos" ||
@@ -110,12 +122,15 @@ export async function atualizarDonoController(req: Request<{id:string}>, res: Re
 
 export async function deletarDonoController(req: Request<{id:string}>, res: Response) {
   try {
-    const id = req.body.id 
+    const id = req.params.id
 
     await deletarDono(id)
 
     res.status(204).send()
   } catch (err) {
+    if (err && typeof err === "object" && "code" in err && err.code === 11000) {
+      return res.status(409).json({ err: "Cadastro duplicado" });
+    }
     if (err instanceof Error) {
       if (
         err.message === "ID do dono inválido" ||

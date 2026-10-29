@@ -13,14 +13,14 @@ export async function acharTodosAnimaisController(req: Request, res: Response) {
     const animais = await acharTodosAnimais();
     res.status(200).json(animais);
   } catch (err) {
+    if (err && typeof err === "object" && "code" in err && err.code === 11000) {
+      return res.status(409).json({ err: "Cadastro duplicado" });
+    }
     res.status(500).json({ err: "Erro ao buscar animais" });
   }
 }
 
-export async function acharAnimalPorIdController(
-  req: Request<{ id: string }>,
-  res: Response,
-) {
+export async function acharAnimalPorIdController(req: Request<{ id: string }>, res: Response) {
   try {
     const id = req.params.id;
 
@@ -28,6 +28,9 @@ export async function acharAnimalPorIdController(
 
     res.status(200).json(animal);
   } catch (err) {
+    if (err && typeof err === "object" && "code" in err && err.code === 11000) {
+      return res.status(409).json({ err: "Cadastro duplicado" });
+    }
     if (err instanceof Error) {
       if (
         err.message === "Animal não encontrado" ||
@@ -51,6 +54,9 @@ export async function criarAnimalController(req: Request, res: Response) {
 
     res.status(201).json(animal);
   } catch (err) {
+    if (err && typeof err === "object" && "code" in err && err.code === 11000) {
+      return res.status(409).json({ err: "Cadastro duplicado" });
+    }
     if (err instanceof Error) {
       if (
         err.message === "Espécie é obrigatória" ||
@@ -80,10 +86,7 @@ export async function criarAnimalController(req: Request, res: Response) {
   }
 }
 
-export async function atualizarAnimalController(
-  req: Request<{ id: string }>,
-  res: Response,
-) {
+export async function atualizarAnimalController(req: Request<{ id: string }>, res: Response) {
   try {
     const id = req.params.id;
     const { especie, racas }:Partial<IAnimal> = req.body;
@@ -102,6 +105,9 @@ export async function atualizarAnimalController(
 
     return res.status(200).json(animal);
   } catch (err) {
+    if (err && typeof err === "object" && "code" in err && err.code === 11000) {
+      return res.status(409).json({ err: "Cadastro duplicado" });
+    }
     if (err instanceof Error) {
       if (
         err.message === "Dados de atualização inválidos" ||
@@ -137,6 +143,9 @@ export async function deletarAnimalController(req: Request<{id:string}>, res: Re
 
     res.status(204).send()
   } catch (err) {
+    if (err && typeof err === "object" && "code" in err && err.code === 11000) {
+      return res.status(409).json({ err: "Cadastro duplicado" });
+    }
     if (err instanceof Error) {
       if (
         err.message === "Animal não encontrado" ||

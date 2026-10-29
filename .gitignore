@@ -1,4 +1,8 @@
 node_modules/
+coverage/
+.vitest/
+.nyc_output/
+*.tsbuildinfo
 
 .env
 .env.*
@@ -8,3 +12,9 @@ dist/
 build/
 
 .vscode/
+
+*.http
+
+# Logs locais
+*.log
+npm-debug.log*
